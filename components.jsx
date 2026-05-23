@@ -1,0 +1,213 @@
+// California Fiesta — content sections (hero, hosts, gallery, dress, wall, travel, footer)
+// All copy is sourced from window.FIESTA_DATA — edit data.js to change wording.
+
+const { useState, useEffect, useRef } = React;
+
+/* ---------- Floral ornament (SVG, used between sections) ---------- */
+function Ornament() {
+  return (
+    <div className="ornament" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+        <circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none" />
+        <path d="M12 3 C 14 7, 14 7, 12 9 C 10 7, 10 7, 12 3 Z" fill="currentColor" stroke="none" opacity="0.85" />
+        <path d="M12 21 C 14 17, 14 17, 12 15 C 10 17, 10 17, 12 21 Z" fill="currentColor" stroke="none" opacity="0.85" />
+        <path d="M3 12 C 7 14, 7 14, 9 12 C 7 10, 7 10, 3 12 Z" fill="currentColor" stroke="none" opacity="0.85" />
+        <path d="M21 12 C 17 14, 17 14, 15 12 C 17 10, 17 10, 21 12 Z" fill="currentColor" stroke="none" opacity="0.85" />
+      </svg>
+    </div>
+  );
+}
+
+/* ---------- Hero ---------- */
+function Hero({ data }) {
+  const s = data.sections.hero;
+  return (
+    <header className="hero" data-screen-label="01 Hero">
+      <div className="hero-image-wrap">
+        <img src={data.heroImage} alt="Emma & Jake recessional" />
+        <div className="hero-overlay">
+          <div className="eyebrow">{s.eyebrow}</div>
+          <div className="script">{s.script}</div>
+          <h1>{s.h1}</h1>
+        </div>
+      </div>
+
+      <div className="container">
+        <div className="hero-card">
+          <div className="eyebrow">{s.cardEyebrow}</div>
+          <h2 className="mt-2">{s.cardHeadline}</h2>
+
+          <div className="hero-detail">
+            <div className="row-line">
+              <div className="label">{s.labelWhen}</div>
+              <div className="value"><strong>{data.openHouse.date}</strong> · {data.openHouse.time}</div>
+            </div>
+            <div className="row-line">
+              <div className="label">{s.labelWhere}</div>
+              <div className="value">
+                {data.venue}<br />
+                <a href={data.mapsUrl} target="_blank" rel="noreferrer">{data.address}</a>
+              </div>
+            </div>
+            <div className="row-line">
+              <div className="label">{s.labelHosts}</div>
+              <div className="value">{data.hosts}</div>
+            </div>
+          </div>
+
+          <div className="weekend-note">
+            {s.weekendPrefix}{" "}
+            <strong>{data.sundayBrunch.label}</strong> on {data.sundayBrunch.date}, {data.sundayBrunch.time}.
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+/* ---------- Hosts note ---------- */
+function HostsNote({ data }) {
+  const s = data.sections.hostsNote;
+  return (
+    <section data-screen-label="02 Hosts">
+      <div className="container tight">
+        <div className="hosts-note">
+          <div className="script">{s.flourish}</div>
+          <h2>{data.hostsNote.headline}</h2>
+          <Ornament />
+          <p className="mt-3">{data.hostsNote.body}</p>
+          <p className="mt-2 muted" style={{ fontSize: 15 }}>{data.hostsNote.signoff}</p>
+          <div className="signature">{data.hostsNote.signature}</div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Gallery — feature wedding photos ---------- */
+function Gallery({ data }) {
+  const s = data.sections.gallery;
+  return (
+    <section data-screen-label="03 Gallery">
+      <div className="container">
+        <div className="section-heading">
+          <div className="eyebrow">{s.eyebrow}</div>
+          <h2>{s.headline}</h2>
+          <p className="deck">{s.deck}</p>
+        </div>
+
+        <div className="gallery">
+          {data.galleryPhotos.map((p, i) => (
+            <div className={"g-tile " + (p.ratio || "portrait")} key={i}>
+              <img src={p.src} alt={p.caption} loading="lazy" />
+              <div className="cap">{p.caption}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Dress code ---------- */
+function DressCode({ data }) {
+  const s = data.sections.dressCode;
+  return (
+    <section data-screen-label="04 Dress">
+      <div className="container tight">
+        <div className="section-heading">
+          <div className="eyebrow">{s.eyebrow}</div>
+        </div>
+        <div className="dress-card">
+          <h2>{data.dressCode.title}</h2>
+          <Ornament />
+          <p className="mt-3">{data.dressCode.description}</p>
+          <div className="tag-row">
+            {data.dressCode.tags.map((t, i) => (
+              <span className="tag" key={i}>{t}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Photo wall ---------- */
+function PhotoWall({ data }) {
+  const s = data.sections.photoWall;
+  const photos = data.wallPhotos;
+  // Pad to 8 tiles minimum so the grid looks intentional
+  const filled = [...photos];
+  while (filled.length < 8) {
+    filled.push({ placeholder: true, key: "ph-" + filled.length });
+  }
+  return (
+    <section data-screen-label="05 PhotoWall">
+      <div className="container">
+        <div className="section-heading">
+          <div className="eyebrow">{s.eyebrow}</div>
+          <h2>{s.headline}</h2>
+          <p className="deck">{s.deck}</p>
+        </div>
+
+        <div className="photo-wall">
+          {filled.map((p, i) => (
+            <div
+              key={p.key || i}
+              className={"tile" + (p.placeholder ? " placeholder" : "")}
+              title={p.caption || ""}
+            >
+              {p.placeholder ? (
+                <span style={{ opacity: 0.5 }}>+</span>
+              ) : p.src ? (
+                <img src={p.src} alt={p.caption} loading="lazy" />
+              ) : null}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Travel / hotel ---------- */
+function Travel({ data }) {
+  const s = data.sections.travel;
+  return (
+    <section data-screen-label="06 Travel">
+      <div className="container tight">
+        <div className="travel-card">
+          <div className="label-mini">{s.label}</div>
+          <h3>{s.headline}</h3>
+          <p>{data.hotel.description}</p>
+          <a className="btn outline" href={data.hotel.url} target="_blank" rel="noreferrer">
+            {data.hotel.name}
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Footer ---------- */
+function FiestaFooter({ data }) {
+  const s = data.sections.footer;
+  return (
+    <footer className="fiesta-footer">
+      <Ornament />
+      <div className="script mt-3">{s.script}</div>
+      <p>
+        {s.questionsLine1} <a href={"mailto:" + data.hostsEmail}>{data.hostsEmail}</a>
+        <br />{s.questionsLine2}
+      </p>
+      <p style={{ fontSize: 12, opacity: 0.7, marginTop: 24 }}>
+        {data.openHouse.date} · {data.venue} · Orinda, California
+      </p>
+    </footer>
+  );
+}
+
+Object.assign(window, {
+  Ornament, Hero, HostsNote, Gallery, DressCode, PhotoWall, Travel, FiestaFooter
+});

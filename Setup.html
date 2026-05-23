@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wire it up — Google Sheets + Email · Emma & Jake's Fiesta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Allura&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #FAF3E7;
+      --ink: #1F1108;
+      --ink-soft: #6B4A2F;
+      --ink-muted: #9A7F60;
+      --rule: #E0CFB0;
+      --pink: #E5326D;
+      --pink-deep: #B71F55;
+      --coral: #F26A4F;
+      --marigold: #E8A93A;
+      --indigo: #2D3F8C;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Outfit", -apple-system, sans-serif;
+      color: var(--ink);
+      background: var(--cream);
+      line-height: 1.6;
+      font-size: 16px;
+    }
+    .container { max-width: 780px; margin: 0 auto; padding: 40px 24px 80px; }
+    h1, h2, h3 { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; line-height: 1.1; margin: 0; color: var(--ink); }
+    h1 { font-size: 48px; margin: 0 0 8px; color: var(--pink-deep); }
+    h2 { font-size: 30px; margin: 40px 0 12px; }
+    h3 { font-size: 22px; margin: 22px 0 6px; }
+    .script {
+      font-family: "Allura", cursive;
+      font-size: 48px;
+      color: var(--coral);
+      line-height: 1;
+    }
+    .eyebrow {
+      font-family: "Outfit", sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--coral);
+      margin-bottom: 10px;
+    }
+    p { margin: 10px 0 14px; }
+    a { color: var(--indigo); text-underline-offset: 3px; }
+    a:hover { color: var(--pink-deep); }
+    code {
+      font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+      font-size: 13px;
+      background: rgba(31,17,8,0.07);
+      padding: 1px 6px;
+      border-radius: 3px;
+      color: var(--ink);
+    }
+    pre {
+      background: var(--ink);
+      color: #F4E8D2;
+      padding: 20px 22px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 14px 0;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    .step {
+      background: #fff;
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 28px 30px 24px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .step-number {
+      position: absolute;
+      top: -16px;
+      left: 24px;
+      background: var(--pink);
+      color: #fff;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: "DM Serif Display", serif;
+      font-size: 20px;
+    }
+    .step h3 { margin-top: 4px; }
+    .callout {
+      background: rgba(232, 169, 58, 0.12);
+      border-left: 3px solid var(--marigold);
+      padding: 14px 18px;
+      border-radius: 0 4px 4px 0;
+      margin: 14px 0;
+      font-size: 15px;
+    }
+    .callout.warn { background: rgba(229, 50, 109, 0.08); border-left-color: var(--pink); }
+    .callout strong { display: block; margin-bottom: 4px; }
+    button.copy {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--marigold);
+      border: none;
+      color: var(--ink);
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 3px;
+      cursor: pointer;
+      font-family: "Outfit", sans-serif;
+      letter-spacing: 0.04em;
+    }
+    button.copy:hover { background: var(--coral); color: #fff; }
+    .codeblock { position: relative; }
+    .pill {
+      display: inline-block;
+      background: var(--indigo);
+      color: #fff;
+      padding: 3px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      margin-right: 6px;
+    }
+    ol li, ul li { margin-bottom: 6px; }
+    .header-bar {
+      text-align: center;
+      padding: 8px 0 36px;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 36px;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 18px;
+      text-decoration: none;
+      font-weight: 500;
+      color: var(--ink-soft);
+      letter-spacing: 0.04em;
+      font-size: 14px;
+    }
+    .back-link:hover { color: var(--pink-deep); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <a href="index.html" class="back-link">← Back to the fiesta page</a>
+
+    <div class="header-bar">
+      <div class="eyebrow">5-minute setup</div>
+      <div class="script">Wire it up</div>
+      <h1 style="margin-top: 4px;">Google Sheets + Email</h1>
+      <p style="color: var(--ink-soft); max-width: 540px; margin: 12px auto 0;">
+        Follow these steps once. After that, every RSVP lands in a Google Sheet
+        and emails <code>pattonhaus@gmail.com</code> automatically.
+      </p>
+    </div>
+
+    <div class="callout">
+      <strong>What you'll need</strong>
+      A Google account (use the one tied to pattonhaus@gmail.com so emails come from you).
+      About 5 minutes. No coding required — you'll paste two things.
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step">
+      <div class="step-number">1</div>
+      <h3>Make a new Google Sheet</h3>
+      <ol>
+        <li>Go to <a href="https://sheets.new" target="_blank" rel="noreferrer">sheets.new</a> — this opens a fresh sheet.</li>
+        <li>Rename it <strong>"Fiesta RSVPs — Emma &amp; Jake"</strong> (top-left).</li>
+        <li>In row 1, paste these column headers (exact order — the script depends on it):</li>
+      </ol>
+      <div class="codeblock">
+        <pre id="headers">Timestamp	Name	Phone	Additional	Arrival	Departure	Dietary	Questions</pre>
+        <button class="copy" data-target="headers">Copy</button>
+      </div>
+      <p style="font-size:14px; color: var(--ink-soft);">
+        (Tabs separate the columns — pasting into A1 fills A1:H1 correctly.)
+      </p>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+      <div class="step-number">2</div>
+      <h3>Open Apps Script from the Sheet</h3>
+      <ol>
+        <li>In your Sheet, click <strong>Extensions → Apps Script</strong>.</li>
+        <li>A new tab opens with a file called <code>Code.gs</code>.</li>
+        <li>Delete whatever's in there. We're replacing it.</li>
+      </ol>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+      <div class="step-number">3</div>
+      <h3>Paste this script into <code>Code.gs</code></h3>
+      <p>It writes RSVPs to the sheet and emails you the moment one arrives.</p>
+      <div class="codeblock">
+        <pre id="script">// Emma & Jake — California Fiesta RSVP receiver
+// Hosted as a Google Apps Script Web App.
+// Appends a row to the sheet and emails the hosts on every RSVP.
+
+const NOTIFY_EMAIL = "pattonhaus@gmail.com";
+const SHEET_NAME = "Sheet1"; // change if you renamed it
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_NAME);
+
+    sheet.appendRow([
+      new Date(),
+      data.name || "",
+      data.phone || "",
+      data.additional || 0,
+      data.arrival || "",
+      data.departure || "",
+      data.dietary || "",
+      data.questions || ""
+    ]);
+
+    sendNotification_(data);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: true }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function sendNotification_(d) {
+  const partySize = 1 + (Number(d.additional) || 0);
+  const subject = "RSVP — " + (d.name || "Guest") +
+                  " (party of " + partySize + ")";
+
+  let body = "";
+  body += "Name:       " + (d.name || "") + "\n";
+  body += "Phone:      " + (d.phone || "") + "\n";
+  body += "Party size: " + partySize + " (guest + " + (d.additional || 0) + ")\n";
+  body += "Arriving:   " + (d.arrival || "—") + "\n";
+  body += "Departing:  " + (d.departure || "—") + "\n";
+  body += "Dietary:    " + (d.dietary || "—") + "\n";
+  body += "Questions:  " + (d.questions || "—") + "\n";
+  body += "\nReceived " + new Date().toLocaleString();
+  body += "\n— Emma & Jake's Fiesta RSVP page";
+
+  MailApp.sendEmail(NOTIFY_EMAIL, subject, body);
+}
+
+// Visit the deployed URL in a browser to confirm it's live
+function doGet() {
+  return ContentService.createTextOutput("Fiesta RSVP endpoint is alive.");
+}</pre>
+        <button class="copy" data-target="script">Copy</button>
+      </div>
+      <ol>
+        <li>Hit <strong>Ctrl/Cmd + S</strong> to save.</li>
+        <li>Name the project something like <em>"Fiesta RSVP"</em>.</li>
+      </ol>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+      <div class="step-number">4</div>
+      <h3>Deploy it as a Web App</h3>
+      <ol>
+        <li>Top right, click <strong>Deploy → New deployment</strong>.</li>
+        <li>Click the gear next to "Select type" → pick <strong>Web app</strong>.</li>
+        <li>Fill in:
+          <ul>
+            <li><strong>Description:</strong> Fiesta RSVP receiver</li>
+            <li><strong>Execute as:</strong> Me <em>(your account)</em></li>
+            <li><strong>Who has access:</strong> <span class="pill">Anyone</span> — this lets guests POST without signing in.</li>
+          </ul>
+        </li>
+        <li>Click <strong>Deploy</strong>.</li>
+        <li>Google will ask you to authorize. Click through, choose your account, "Advanced → Go to project", "Allow". This is normal for scripts you write yourself.</li>
+        <li>You'll get a <strong>Web app URL</strong> ending in <code>/exec</code>. <strong>Copy it.</strong></li>
+      </ol>
+
+      <div class="callout warn">
+        <strong>Critical</strong>
+        "Who has access" <em>must</em> be set to <strong>Anyone</strong>.
+        Otherwise guests will see a Google sign-in wall when they RSVP.
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+      <div class="step-number">5</div>
+      <h3>Paste the URL into <code>data.js</code></h3>
+      <p>Open <code>data.js</code> in this project. Near the bottom, find:</p>
+      <pre>appsScriptURL: "" // e.g. "https://script.google.com/macros/s/AKfy.../exec"</pre>
+      <p>Paste your URL between the quotes:</p>
+      <pre>appsScriptURL: "https://script.google.com/macros/s/AKfy.../exec"</pre>
+      <p>Save the file. Reload <code>index.html</code>. RSVPs are now live.</p>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step">
+      <div class="step-number">6</div>
+      <h3>Test it</h3>
+      <div class="callout">
+        <strong>Quick clarification on what the URLs do</strong>
+        Your Apps Script <code>/exec</code> URL is <em>not</em> the RSVP page.
+        It's a behind-the-scenes endpoint that receives form submissions and
+        writes them to your Sheet. Visiting it directly just confirms it's
+        alive — there's no form there.
+        <br><br>
+        The actual fiesta page guests see (and where the RSVP form lives) is
+        <code>index.html</code> — the file in this project. That page POSTs to your
+        <code>/exec</code> URL behind the scenes when someone hits "Send my RSVP".
+      </div>
+      <p><strong>How to test, end-to-end:</strong></p>
+      <ol>
+        <li>
+          Open <code>index.html</code> in your browser. In this project you can just
+          click <code>index.html</code> in the file list at the top.
+          (Once you host it for guests — see the next section — you'll use that
+          public URL instead.)
+        </li>
+        <li>Scroll to the RSVP section near the bottom.</li>
+        <li>Fill in a test entry with your own name and phone. Click <strong>Send my RSVP</strong>.</li>
+        <li>Open your <strong>Google Sheet</strong> — a new row should appear within a few seconds.</li>
+        <li>Check <strong>pattonhaus@gmail.com</strong> — an email should be waiting (also within seconds, sometimes a minute or two).</li>
+      </ol>
+      <p style="font-size:14px; color: var(--ink-soft); margin-top: 14px;">
+        Diagnosing problems: in the Apps Script editor, left sidebar →
+        <strong>Executions</strong> shows every POST it received, success or
+        failure. If you submit the form and <em>no</em> execution appears,
+        the page isn't reaching the script (usually because
+        <code>appsScriptURL</code> in <code>data.js</code> wasn't saved, or
+        the page is cached — try a hard reload). If an execution appears but
+        failed, the error message tells you why.
+      </p>
+    </div>
+
+    <h2>Sending the link to guests</h2>
+    <p>
+      Host this <code>index.html</code> (and the other project files) anywhere
+      that serves static files. A few options, easiest to most involved:
+    </p>
+
+    <h3 style="margin-top: 22px;">Your existing WordPress site</h3>
+    <p>
+      WordPress's media library blocks <code>.html</code>/<code>.js</code>/<code>.jsx</code>
+      uploads, so you can't go through the admin. You'll upload the files
+      <em>around</em> WordPress, not into it:
+    </p>
+    <ol>
+      <li>Connect to your site via FTP/SFTP (FileZilla, Cyberduck) or your host's control-panel file manager.</li>
+      <li>
+        Navigate to the web root — usually <code>public_html/</code> or <code>www/</code>.
+        This is the folder containing <code>wp-config.php</code> and <code>wp-content/</code>.
+        <strong>Don't</strong> put your fiesta folder inside <code>wp-content/</code> —
+        keep it as a sibling.
+      </li>
+      <li>
+        Make a folder. For privacy from web crawlers, pick an unguessable name
+        like <code>emma-jake-2026-x7k4q9</code> instead of <code>fiesta</code>.
+      </li>
+      <li>Upload the project files into it (preserving the <code>photos/</code> subfolder).</li>
+      <li>
+        Visit <code>yoursite.com/your-folder-name/</code> — you should see the fiesta page.
+      </li>
+    </ol>
+    <div class="callout warn">
+      <strong>If you get a WordPress 404 instead of your page:</strong>
+      WordPress's <code>.htaccess</code> rewrite rules are hijacking the subfolder.
+      Edit <code>/public_html/.htaccess</code> and add this near the top, <em>above</em>
+      the <code># BEGIN WordPress</code> block (replace <code>your-folder-name</code> with the real name):
+      <pre style="margin-top: 8px;">RewriteEngine On
+RewriteRule ^your-folder-name/ - [L]</pre>
+    </div>
+
+    <h3 style="margin-top: 28px;">No website? Free alternatives</h3>
+    <ul>
+      <li>
+        <strong><a href="https://app.netlify.com/drop" target="_blank" rel="noreferrer">Netlify Drop</a></strong> —
+        drag the unzipped project folder onto the page, get a public URL in seconds. No account needed.
+      </li>
+      <li>
+        <strong><a href="https://pages.cloudflare.com/" target="_blank" rel="noreferrer">Cloudflare Pages</a></strong> —
+        similar drag-and-drop, with a free account.
+      </li>
+      <li>
+        <strong>GitHub Pages</strong> — create a public repo, upload the files,
+        Settings → Pages → enable. URL becomes <code>username.github.io/repo-name/</code>.
+        Takes ~10 minutes the first time.
+      </li>
+    </ul>
+
+    <h2 id="privacy">Keeping the page private from search engines</h2>
+    <p>
+      The page already has <code>noindex, nofollow</code> meta tags built in
+      (top of <code>index.html</code>). That tells Google, Bing, and other
+      well-behaved crawlers not to index it. For extra privacy, stack:
+    </p>
+    <ul>
+      <li>
+        <strong>Use an unguessable folder name</strong> (see WordPress step above).
+        Crawlers can't index what they can't find — they have to follow a link
+        from somewhere. If your URL only lives in private text messages, no
+        crawler will ever encounter it.
+      </li>
+      <li>
+        <strong>Don't post the link publicly</strong> — no Facebook, no Twitter,
+        no public Instagram caption, no "open" group chat. SMS, email, and
+        DMs are fine.
+      </li>
+      <li>
+        <strong>Password-protect the folder (optional, real security).</strong>
+        On Apache hosts (most WordPress hosts) you can add an
+        <code>.htaccess</code> + <code>.htpasswd</code> pair to the folder, which
+        forces a browser login before the page loads. If you want this, ask me
+        and I'll write the files for you with a password you choose.
+      </li>
+    </ul>
+
+    <h2>Editing event details later</h2>
+    <p>
+      Every detail — date, time, address, hosts' note, dress code, hotel
+      recommendation — lives in <code>data.js</code>. Edit there and re-deploy
+      your host. Guests see the new version automatically; you don't need to
+      re-send the link.
+    </p>
+
+    <h2 id="troubleshooting" style="color: var(--pink-deep);">Troubleshooting</h2>
+
+    <div class="step" style="border-color: var(--pink); border-width: 2px;">
+      <h3 style="color: var(--pink-deep); margin-top: 0;">"Sorry, unable to open the file at this time"</h3>
+      <p>The most common setup error. Three causes — check in order:</p>
+
+      <p><strong>Cause 1 — Wrong URL.</strong> Apps Script shows two URLs and they look almost identical:</p>
+      <ul>
+        <li>The <code>/dev</code> URL (from "Test deployments") <strong>only works when signed in as you</strong>.</li>
+        <li>The <code>/exec</code> URL (from "Manage deployments") is the public one for guests.</li>
+      </ul>
+      <p>
+        Go to <strong>Deploy → Manage deployments</strong> and copy the URL that ends in
+        <code>/exec</code>. That's the one for <code>data.js</code> and for testing.
+      </p>
+
+      <p><strong>Cause 2 — Access not set to "Anyone".</strong></p>
+      <p>
+        Open <strong>Deploy → Manage deployments</strong> → click the pencil icon to edit
+        your deployment. Three things <em>must</em> match:
+      </p>
+      <ul>
+        <li><strong>Version:</strong> <em>New version</em> — every config change requires this, or it won't take effect</li>
+        <li><strong>Execute as:</strong> Me</li>
+        <li><strong>Who has access:</strong> <span class="pill">Anyone</span> — not "Anyone with Google account" (that still requires sign-in)</li>
+      </ul>
+      <p>Click <strong>Deploy</strong>. You'll get a fresh <code>/exec</code> URL — paste it back into <code>data.js</code> if it changed.</p>
+
+      <p><strong>Cause 3 — Script not authorized yet.</strong></p>
+      <p>
+        In the editor, open <code>Code.gs</code>. From the function dropdown at the top, pick
+        <code>doGet</code> and click <strong>Run</strong>. A modal appears:
+        <em>"Authorization required"</em> → <em>Review permissions</em> → choose your account →
+        <em>"Advanced → Go to project → Allow"</em>.
+      </p>
+      <p>Sanity test: paste your <code>/exec</code> URL into a browser. You should see:</p>
+      <pre>Fiesta RSVP endpoint is alive.</pre>
+      <p>If you see that, the endpoint is public and authorized. If you still see the error, one of the three causes above is still in play.</p>
+    </div>
+
+    <h2>Other sanity checks</h2>
+    <ul>
+      <li><strong>RSVP submits but no row appears in the Sheet.</strong> Open Apps Script → left sidebar → <strong>Executions</strong>. Every POST is logged here, including failures with the error message. Usually it's a header mismatch — see next item.</li>
+      <li><strong>Sheet headers don't match.</strong> The script writes columns in this exact order: Timestamp, Name, Phone, Additional, Arrival, Departure, Dietary, Questions. If your sheet has different headers, re-paste row 1 from Step 1.</li>
+      <li><strong>Emails not arriving?</strong> Check Spam. Then Executions — if the row was written but no email arrived, MailApp probably hit your daily quota (100 emails/day for free Google accounts, which is plenty for a fiesta but worth knowing).</li>
+      <li><strong>Want a different notification email?</strong> Change <code>NOTIFY_EMAIL</code> at the top of the script, save, then <strong>Deploy → Manage deployments → New version → Deploy</strong> (or the change won't go live).</li>
+      <li><strong>Changed the script and nothing updated?</strong> Apps Script doesn't auto-deploy edits. Every code change needs <strong>Manage deployments → edit → New version → Deploy</strong>.</li>
+    </ul>
+
+    <p style="text-align: center; margin-top: 56px;">
+      <span class="script" style="font-size: 42px;">See you in June</span>
+    </p>
+  </div>
+
+  <script>
+    document.querySelectorAll(".copy").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = document.getElementById(btn.dataset.target);
+        navigator.clipboard.writeText(target.textContent).then(() => {
+          const orig = btn.textContent;
+          btn.textContent = "Copied";
+          setTimeout(() => btn.textContent = orig, 1500);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
