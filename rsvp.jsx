@@ -48,7 +48,7 @@ function RSVPForm({ onSubmit, formRef }) {
         <h2>We can't wait to see you, {form.name.split(/[\s,]+/)[0]}</h2>
         <p>
           Your RSVP is in. Laura and Jeff have been notified, and you'll get
-          a text from us a few days before with any last-minute details.
+          a text from us with any last-minute details.
         </p>
         <button className="btn ghost mt-3" onClick={() => { setSubmitted(false); setSubmitting(false); }}>
           ← Edit my response
