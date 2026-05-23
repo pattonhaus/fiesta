@@ -166,10 +166,16 @@ section {
 .hero-overlay {
   position: absolute;
   left: 0; right: 0; bottom: 0;
-  padding: 32px 24px 36px;
+  /* Bottom padding must clear the .hero-card's -60px overlap (below)
+     plus a buffer for the H1's descenders. Larger on mobile where the
+     H1 scales up via clamp(). */
+  padding: 32px 24px 110px;
   text-align: center;
   color: #fff;
   z-index: 2;
+}
+@media (min-width: 700px) {
+  .hero-overlay { padding-bottom: 90px; }
 }
 .hero-overlay .eyebrow {
   color: rgba(255,255,255,0.92);
