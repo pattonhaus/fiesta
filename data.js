@@ -49,7 +49,7 @@ window.FIESTA_DATA = {
   // Dress code
   dressCode: {
     title: "Fiesta Festive",
-    description: "Think garden party in Frida Kahlo's courtyard — colorful florals, linen, embroidery, anything you'd wear to a casual party in Mexico. Wear what makes you happy. The dress code is joy.",
+    description: "Casual attire. Think tropical bright colors, florals, and a light sweater or jacket. We have warm days and cool nights. Wear what makes you happy. The dress code is joy.",
     tags: ["Color encouraged", "Florals welcome", "Linen & light fabrics", "Comfortable shoes"]
   },
 
@@ -83,7 +83,7 @@ window.FIESTA_DATA = {
       script: "California Fiesta honoring",            // the cursive overlay on the photo
       h1: "Emma & Jake",                       // the big serif name on the photo
       cardEyebrow: "A Marriage & Patton Family Reunion Weekend",
-      cardHeadline: "A welcome-home celebration",
+      cardHeadline: "A hometown celebration",
       labelWhen: "When",
       labelWhere: "Where",
       labelHosts: "Hosted by",
@@ -99,7 +99,7 @@ window.FIESTA_DATA = {
     gallery: {
       eyebrow: "From the wedding",
       headline: "A glimpse of Mexico",
-      deck: "A few favorites from the day. The full album lives in the cloud — we'll share it during the open house."
+      deck: "A few favorites from the day. We'll share more during the open house."
     },
 
     // What to wear
@@ -109,7 +109,7 @@ window.FIESTA_DATA = {
 
     // The crowdsourced photo wall
     photoWall: {
-      eyebrow: "Bring your memories",
+      eyebrow: "Family Photos",
       headline: "The photo wall",
       deck: "We'd love it if you could upload a recent family photo or a selfie to share with everyone."
     },
