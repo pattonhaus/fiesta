@@ -144,4 +144,3 @@ window.FIESTA_DATA = {
   // Leave as "" to disable uploads (the wall will still show seed photos).
   photoEndpointURL: "https://script.google.com/macros/s/AKfycbx1SWqQncXRknMpieSo1SEe1OOMluRFO9lf1yzTTueTVLvMSHRXhc4a72xHmdqCv0tZ/exec"
 };
-};
