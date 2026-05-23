@@ -111,7 +111,7 @@ function RSVPForm({ onSubmit, formRef }) {
 
       <div className="field-row">
         <div className="field">
-          <label htmlFor="rsvp-arrival">Arriving</label>
+          <label htmlFor="rsvp-arrival">Coming from afar? Tell us your plans! Arriving</label>
           <input
             id="rsvp-arrival"
             className="input"
