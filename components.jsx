@@ -270,7 +270,6 @@ function PhotoWall({ data }) {
             ref={fileInputRef}
             type="file"
             accept="image/*"
-            capture="environment"
             onChange={onFileChange}
             style={{ display: "none" }}
           />
