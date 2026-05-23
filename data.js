@@ -137,5 +137,11 @@ window.FIESTA_DATA = {
 
   // Apps Script endpoint — paste your deployed Web App URL here.
   // See Setup.html for the 5-minute guide.
-  appsScriptURL: "https://script.google.com/macros/s/AKfycbyqiF_CayL3HrTb_WnLZaVuKheYO45kMh3Wa0di-3KZu-c0WiKnRhK46TDVwHdWBiqgOw/exec"
+  appsScriptURL: "https://script.google.com/macros/s/AKfycbyqiF_CayL3HrTb_WnLZaVuKheYO45kMh3Wa0di-3KZu-c0WiKnRhK46TDVwHdWBiqgOw/exec",
+
+  // Photo-wall endpoint — paste your deployed Photo Wall Web App URL here.
+  // See Setup-PhotoWall.html for the 5-minute guide.
+  // Leave as "" to disable uploads (the wall will still show seed photos).
+  photoEndpointURL: "https://script.google.com/macros/s/AKfycbx1SWqQncXRknMpieSo1SEe1OOMluRFO9lf1yzTTueTVLvMSHRXhc4a72xHmdqCv0tZ/exec"
+};
 };
