@@ -414,6 +414,51 @@ section {
   font-family: "DM Serif Display", serif;
   font-size: 28px;
 }
+.photo-wall .tile.add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--pink, #E5326D);
+  color: #fff;
+  border: 1px dashed rgba(255,255,255,0.6);
+  cursor: pointer;
+  font-family: "Outfit", sans-serif;
+  text-align: center;
+  padding: 8px;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+.photo-wall .tile.add:hover { filter: brightness(1.08); }
+.photo-wall .tile.add:active { transform: scale(0.98); }
+.photo-wall .tile.add[disabled] { cursor: wait; opacity: 0.7; }
+.photo-wall .tile.add .add-plus {
+  font-family: "DM Serif Display", serif;
+  font-size: 36px;
+  line-height: 1;
+}
+.photo-wall .tile.add .add-label {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.photo-wall .tile.add.busy {
+  background: var(--ink-soft, #6B4A2F);
+}
+.wall-error {
+  margin-top: 14px;
+  color: var(--pink-deep, #B71F55);
+  font-size: 14px;
+  text-align: center;
+}
+.wall-hint {
+  margin-top: 14px;
+  color: var(--ink-muted, #9A7F60);
+  font-size: 13px;
+  text-align: center;
+  font-style: italic;
+}
 
 /* ---------- Travel / hotel ---------- */
 .travel-card {
