@@ -134,14 +134,111 @@ function DressCode({ data }) {
 }
 
 /* ---------- Photo wall ---------- */
+// Resize a File to a JPEG data URL (max edge px). Keeps payloads sane.
+async function resizeImage(file, maxEdge = 1600, quality = 0.85) {
+  const dataUrl = await new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+  const img = await new Promise((res, rej) => {
+    const i = new Image();
+    i.onload = () => res(i);
+    i.onerror = rej;
+    i.src = dataUrl;
+  });
+  let { width, height } = img;
+  const scale = Math.min(1, maxEdge / Math.max(width, height));
+  width = Math.round(width * scale);
+  height = Math.round(height * scale);
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0, width, height);
+  return canvas.toDataURL("image/jpeg", quality);
+}
+
 function PhotoWall({ data }) {
   const s = data.sections.photoWall;
-  const photos = data.wallPhotos;
-  // Pad to 8 tiles minimum so the grid looks intentional
-  const filled = [...photos];
-  while (filled.length < 8) {
-    filled.push({ placeholder: true, key: "ph-" + filled.length });
+  const seed = data.wallPhotos || [];
+  const endpoint = data.photoEndpointURL || "";
+
+  const [uploaded, setUploaded] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
+  const fileInputRef = useRef(null);
+
+  // Fetch live photos on mount (and after each upload)
+  const refresh = async () => {
+    if (!endpoint) return;
+    setLoading(true);
+    try {
+      const r = await fetch(endpoint + "?t=" + Date.now());
+      const j = await r.json();
+      if (j.ok && Array.isArray(j.photos)) {
+        setUploaded(j.photos);
+      }
+    } catch (e) {
+      // silent — wall just shows seed
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => { refresh(); }, []);
+
+  const onPickFile = () => fileInputRef.current?.click();
+
+  const onFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // reset so same file can be picked again
+    if (!file) return;
+    if (!endpoint) {
+      setError("Photo uploads aren't wired up yet. Ask Laura.");
+      return;
+    }
+    setError("");
+    setUploading(true);
+    try {
+      const dataUrl = await resizeImage(file, 1600, 0.85);
+      const base64 = dataUrl.split(",")[1];
+      const author = (localStorage.getItem("fiesta-name") || "").trim();
+      const res = await fetch(endpoint, {
+        method: "POST",
+        // text/plain avoids a CORS preflight against Apps Script
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          filename: file.name,
+          mimeType: "image/jpeg",
+          dataBase64: base64,
+          author
+        })
+      });
+      const j = await res.json();
+      if (!j.ok) throw new Error(j.error || "Upload failed");
+      // Optimistic: add the new photo immediately
+      setUploaded(prev => [{ id: j.id, src: j.url, author }, ...prev]);
+      // And refresh to stay in sync
+      refresh();
+    } catch (err) {
+      setError("Couldn't upload that one. Try a smaller photo?");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // Compose tiles: uploaded (newest first) + seed, padded to a tidy grid
+  const tiles = [
+    ...uploaded.map(p => ({ src: p.src, caption: p.author || "" })),
+    ...seed.map(p => ({ src: p.src, caption: p.caption || "" }))
+  ];
+  const minTiles = 7; // 7 + the "add" tile = 8
+  while (tiles.length < minTiles) {
+    tiles.push({ placeholder: true });
   }
+
   return (
     <section data-screen-label="05 PhotoWall">
       <div className="container">
@@ -152,9 +249,35 @@ function PhotoWall({ data }) {
         </div>
 
         <div className="photo-wall">
-          {filled.map((p, i) => (
+          {/* Add-a-photo tile, always first */}
+          <button
+            type="button"
+            className={"tile add" + (uploading ? " busy" : "")}
+            onClick={onPickFile}
+            disabled={uploading}
+            aria-label="Add a photo"
+          >
+            {uploading ? (
+              <span className="add-label">Uploading…</span>
+            ) : (
+              <>
+                <span className="add-plus" aria-hidden="true">+</span>
+                <span className="add-label">Add a photo</span>
+              </>
+            )}
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={onFileChange}
+            style={{ display: "none" }}
+          />
+
+          {tiles.map((p, i) => (
             <div
-              key={p.key || i}
+              key={i}
               className={"tile" + (p.placeholder ? " placeholder" : "")}
               title={p.caption || ""}
             >
@@ -166,6 +289,13 @@ function PhotoWall({ data }) {
             </div>
           ))}
         </div>
+
+        {error && <div className="wall-error">{error}</div>}
+        {!endpoint && (
+          <div className="wall-hint">
+            Photo uploads aren't configured yet. See <a href="Setup-PhotoWall.html">Setup-PhotoWall.html</a> for the 5-minute guide.
+          </div>
+        )}
       </div>
     </section>
   );
