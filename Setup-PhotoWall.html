@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wire up the photo wall · Emma & Jake's Fiesta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Allura&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #FAF3E7;
+      --ink: #1F1108;
+      --ink-soft: #6B4A2F;
+      --ink-muted: #9A7F60;
+      --rule: #E0CFB0;
+      --pink: #E5326D;
+      --pink-deep: #B71F55;
+      --coral: #F26A4F;
+      --marigold: #E8A93A;
+      --indigo: #2D3F8C;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Outfit", -apple-system, sans-serif;
+      color: var(--ink);
+      background: var(--cream);
+      line-height: 1.6;
+      font-size: 16px;
+    }
+    .container { max-width: 780px; margin: 0 auto; padding: 40px 24px 80px; }
+    h1, h2, h3 { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; line-height: 1.1; margin: 0; color: var(--ink); }
+    h1 { font-size: 48px; margin: 0 0 8px; color: var(--pink-deep); }
+    h2 { font-size: 30px; margin: 40px 0 12px; }
+    h3 { font-size: 22px; margin: 22px 0 6px; }
+    .script {
+      font-family: "Allura", cursive;
+      font-size: 48px;
+      color: var(--coral);
+      line-height: 1;
+    }
+    .eyebrow {
+      font-family: "Outfit", sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--coral);
+      margin-bottom: 10px;
+    }
+    p { margin: 10px 0 14px; }
+    a { color: var(--indigo); text-underline-offset: 3px; }
+    a:hover { color: var(--pink-deep); }
+    code {
+      font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+      font-size: 13px;
+      background: rgba(31,17,8,0.07);
+      padding: 1px 6px;
+      border-radius: 3px;
+      color: var(--ink);
+    }
+    pre {
+      background: var(--ink);
+      color: #F4E8D2;
+      padding: 20px 22px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 14px 0;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    .step {
+      background: #fff;
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 28px 30px 24px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .step-number {
+      position: absolute;
+      top: -16px;
+      left: 24px;
+      background: var(--pink);
+      color: #fff;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: "DM Serif Display", serif;
+      font-size: 20px;
+    }
+    .step h3 { margin-top: 4px; }
+    .callout {
+      background: rgba(232, 169, 58, 0.12);
+      border-left: 3px solid var(--marigold);
+      padding: 14px 18px;
+      border-radius: 0 4px 4px 0;
+      margin: 14px 0;
+      font-size: 15px;
+    }
+    .callout.warn { background: rgba(229, 50, 109, 0.08); border-left-color: var(--pink); }
+    .callout strong { display: block; margin-bottom: 4px; }
+    button.copy {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--marigold);
+      border: none;
+      color: var(--ink);
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 3px;
+      cursor: pointer;
+      font-family: "Outfit", sans-serif;
+      letter-spacing: 0.04em;
+    }
+    button.copy:hover { background: var(--coral); color: #fff; }
+    .codeblock { position: relative; }
+    .pill {
+      display: inline-block;
+      background: var(--indigo);
+      color: #fff;
+      padding: 3px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      margin-right: 6px;
+    }
+    ol li, ul li { margin-bottom: 6px; }
+    .header-bar {
+      text-align: center;
+      padding: 8px 0 36px;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 36px;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 18px;
+      text-decoration: none;
+      font-weight: 500;
+      color: var(--ink-soft);
+      letter-spacing: 0.04em;
+      font-size: 14px;
+    }
+    .back-link:hover { color: var(--pink-deep); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <a href="Setup.html" class="back-link">← Back to RSVP setup</a>
+
+    <div class="header-bar">
+      <div class="eyebrow">5-minute setup</div>
+      <div class="script">The photo wall</div>
+      <h1 style="margin-top: 4px;">Let guests upload</h1>
+      <p style="color: var(--ink-soft); max-width: 560px; margin: 12px auto 0;">
+        Right now the photo wall on <code>index.html</code> only shows the
+        seed photos baked into <code>data.js</code>. Follow these steps once
+        and guests can tap <strong>“+ Add a photo”</strong> from their phone
+        — every upload lands in a Google Drive folder you own and appears on
+        the wall for everyone.
+      </p>
+    </div>
+
+    <div class="callout">
+      <strong>How it works (so you know what you're building)</strong>
+      A second tiny Google Apps Script — separate from the RSVP one — runs as
+      a public Web App. When a guest picks a photo, the page resizes it in
+      their browser (so it's not a 20 MB monster), sends the bytes to your
+      script, and the script saves the file into a Google Drive folder
+      you'll create. The same script also returns the list of uploaded
+      photos when the wall loads, so the grid stays fresh for everyone.
+      <br><br>
+      <strong>Why a separate script?</strong> Different responsibilities,
+      different deploy cadence. You can break or redeploy the photo wall
+      without touching RSVPs, and vice-versa.
+    </div>
+
+    <div class="callout warn">
+      <strong>One thing to know up front</strong>
+      Photos uploaded by guests are <em>publicly viewable to anyone with
+      the link</em> (that's how the wall can display them without sign-in).
+      The folder itself is unlisted, but treat photos guests upload as
+      "shareable to people who have the page URL." Same privacy posture as
+      the rest of the page — keep the URL out of public posts.
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step">
+      <div class="step-number">1</div>
+      <h3>Make a Google Drive folder for the photos</h3>
+      <ol>
+        <li>Go to <a href="https://drive.google.com" target="_blank" rel="noreferrer">drive.google.com</a>, signed in as <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c9b9a8bdbda6a7a1a8bcba89aea4a8a0a5e7aaa6a4">[email&#160;protected]</a></strong>.</li>
+        <li>Click <strong>New → New folder</strong>. Name it <strong>"Fiesta Photo Wall — Emma &amp; Jake"</strong>.</li>
+        <li>
+          Open the folder. Click the folder name at the top → <strong>Share → Share</strong>.
+          Under "General access" change <strong>Restricted</strong> to
+          <strong>Anyone with the link</strong>, role <strong>Viewer</strong>. Click <strong>Done</strong>.
+        </li>
+        <li>
+          Look at the URL bar. It looks like:
+          <code>https://drive.google.com/drive/folders/<strong>1Ab2Cd3EfGhIjKlMn...</strong></code>
+          Copy the long string after <code>/folders/</code> — that's the
+          <strong>folder ID</strong>. You'll paste it into the script in Step 3.
+        </li>
+      </ol>
+      <div class="callout">
+        <strong>Why "Anyone with the link"?</strong>
+        Each uploaded photo inherits the folder's sharing setting. If the
+        folder is private, the <code>&lt;img&gt;</code> tags on the page can't
+        load the photos — guests would see broken tiles.
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+      <div class="step-number">2</div>
+      <h3>Create a new Apps Script project</h3>
+      <ol>
+        <li>Go to <a href="https://script.new" target="_blank" rel="noreferrer">script.new</a> — this opens a fresh Apps Script project.</li>
+        <li>Rename it (top-left) to <strong>"Fiesta Photo Wall"</strong>.</li>
+        <li>You'll see a file called <code>Code.gs</code> with a stub. Delete what's there.</li>
+      </ol>
+      <div class="callout warn">
+        <strong>Don't reuse the RSVP script.</strong>
+        Make a brand-new project. They share <em>nothing</em> — different
+        endpoint URL, different deploy, different code. Mixing them is a
+        debugging nightmare later.
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+      <div class="step-number">3</div>
+      <h3>Paste this script into <code>Code.gs</code></h3>
+      <p>
+        It handles uploads (<code>doPost</code>) and returns the current photo
+        list (<code>doGet</code>). Replace <code>FOLDER_ID</code> at the top
+        with the ID you copied in Step 1.
+      </p>
+      <div class="codeblock">
+        <pre id="script">// Emma &amp; Jake — California Fiesta Photo Wall
+// Hosted as a Google Apps Script Web App.
+// POST: saves an uploaded photo into the Drive folder.
+// GET:  returns a JSON list of photos already in the folder.
+
+// PASTE YOUR DRIVE FOLDER ID HERE (from Step 1).
+const FOLDER_ID = "PASTE_FOLDER_ID_HERE";
+
+// Optional: notify the hosts when a guest uploads. Set to "" to disable.
+const NOTIFY_EMAIL = "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0e7e6f7a7a6160666f7b7d4e69636f6762206d6163">[email&#160;protected]</a>";
+
+// Returns the list of photos in the folder, newest first.
+// The page calls this on load to populate the wall.
+function doGet() {
+  try {
+    const folder = DriveApp.getFolderById(FOLDER_ID);
+    const files = folder.getFiles();
+    const photos = [];
+    while (files.hasNext()) {
+      const f = files.next();
+      photos.push({
+        id: f.getId(),
+        name: f.getName(),
+        // This URL renders the image inline in an &lt;img&gt; tag.
+        src: "https://drive.google.com/thumbnail?id=" + f.getId() + "&amp;sz=w1200",
+        created: f.getDateCreated().getTime()
+      });
+    }
+    // Newest first
+    photos.sort((a, b) => b.created - a.created);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: true, photos: photos }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// Accepts a base64-encoded photo from the page and writes it to Drive.
+// Body shape: { filename, mimeType, dataBase64, author }
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    if (!data.dataBase64) throw new Error("Missing dataBase64");
+
+    const folder = DriveApp.getFolderById(FOLDER_ID);
+    const bytes = Utilities.base64Decode(data.dataBase64);
+    const mime = data.mimeType || "image/jpeg";
+    const name = sanitizeName_(data.filename || "photo.jpg", data.author);
+
+    const blob = Utilities.newBlob(bytes, mime, name);
+    const file = folder.createFile(blob);
+
+    // Mirror the folder's sharing so the &lt;img&gt; tag can fetch it.
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+
+    if (NOTIFY_EMAIL) notify_(data, file);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({
+        ok: true,
+        id: file.getId(),
+        url: "https://drive.google.com/thumbnail?id=" + file.getId() + "&amp;sz=w1200"
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function sanitizeName_(original, author) {
+  const stamp = Utilities.formatDate(new Date(), "America/Los_Angeles", "yyyyMMdd-HHmmss");
+  const who = (author || "guest").replace(/[^a-zA-Z0-9_-]+/g, "_").slice(0, 30) || "guest";
+  const ext = (original.match(/\.[a-zA-Z0-9]+$/) || [".jpg"])[0].toLowerCase();
+  return stamp + "_" + who + ext;
+}
+
+function notify_(d, file) {
+  const subject = "Photo wall — new upload" + (d.author ? " from " + d.author : "");
+  const body =
+    "A new photo just landed on the fiesta photo wall.\n\n" +
+    "From:     " + (d.author || "(no name on file)") + "\n" +
+    "File:     " + file.getName() + "\n" +
+    "Open:     https://drive.google.com/file/d/" + file.getId() + "/view\n" +
+    "Folder:   https://drive.google.com/drive/folders/" + FOLDER_ID + "\n\n" +
+    "Received " + new Date().toLocaleString();
+  MailApp.sendEmail(NOTIFY_EMAIL, subject, body);
+}</pre>
+        <button class="copy" data-target="script">Copy</button>
+      </div>
+      <ol>
+        <li>Replace <code>PASTE_FOLDER_ID_HERE</code> with the folder ID from Step 1.</li>
+        <li>Hit <strong>Ctrl/Cmd + S</strong> to save.</li>
+      </ol>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+      <div class="step-number">4</div>
+      <h3>Deploy it as a Web App</h3>
+      <ol>
+        <li>Top right, click <strong>Deploy → New deployment</strong>.</li>
+        <li>Click the gear next to "Select type" → pick <strong>Web app</strong>.</li>
+        <li>Fill in:
+          <ul>
+            <li><strong>Description:</strong> Fiesta Photo Wall</li>
+            <li><strong>Execute as:</strong> Me <em>(your account)</em></li>
+            <li><strong>Who has access:</strong> <span class="pill">Anyone</span> — same as the RSVP one. Guests can't sign in to upload.</li>
+          </ul>
+        </li>
+        <li>Click <strong>Deploy</strong>.</li>
+        <li>
+          Google will ask for permission — this script touches Drive and
+          (optionally) Gmail, so the consent screen is louder than for the
+          RSVP script. Click through: <em>Advanced → Go to project → Allow</em>.
+          You're authorizing your <em>own</em> script to use your own Drive.
+        </li>
+        <li>You'll get a <strong>Web app URL</strong> ending in <code>/exec</code>. <strong>Copy it.</strong></li>
+      </ol>
+
+      <div class="callout warn">
+        <strong>Critical</strong>
+        "Who has access" <em>must</em> be set to <strong>Anyone</strong> —
+        not "Anyone with Google account". Guests upload from their phones
+        without signing in.
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+      <div class="step-number">5</div>
+      <h3>Paste the URL into <code>data.js</code></h3>
+      <p>Open <code>data.js</code>. Near the bottom you'll see:</p>
+      <pre>photoEndpointURL: "" // see Setup-PhotoWall.html</pre>
+      <p>Paste your photo-wall <code>/exec</code> URL between the quotes:</p>
+      <pre>photoEndpointURL: "https://script.google.com/macros/s/AKfy.../exec"</pre>
+      <p>
+        Save, commit, and push. The photo wall on the live site now shows the
+        <strong>+ Add a photo</strong> tile, fetches uploaded photos on load,
+        and refreshes after each upload.
+      </p>
+      <div class="callout">
+        <strong>Don't mix up the two URLs.</strong>
+        <code>appsScriptURL</code> = RSVPs. <code>photoEndpointURL</code> = photo wall.
+        They look almost identical (same <code>script.google.com/macros/s/…/exec</code>
+        shape). Pasting the wrong one into the wrong field will fail silently
+        in confusing ways.
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step">
+      <div class="step-number">6</div>
+      <h3>Test it end-to-end</h3>
+      <ol>
+        <li>
+          Quick sanity check: paste your photo-wall <code>/exec</code> URL into
+          a browser. You should see JSON like
+          <code>{"ok":true,"photos":[]}</code> (or with photos if Drive
+          already has any). If you see an HTML error page, jump to Troubleshooting below.
+        </li>
+        <li>Open the live <code>index.html</code> in your browser (or on your phone).</li>
+        <li>Scroll to the photo wall.</li>
+        <li>Tap the bright pink <strong>+ Add a photo</strong> tile.</li>
+        <li>Pick or shoot a photo.</li>
+        <li>
+          Within a few seconds the tile flips to "Uploading…" and then your
+          photo appears as the first tile after the + button.
+        </li>
+        <li>Open the Drive folder — the file should be there with a timestamped name.</li>
+        <li>Reload the page. The photo should still be on the wall — that proves <code>doGet</code> is working.</li>
+      </ol>
+      <p style="font-size:14px; color: var(--ink-soft); margin-top: 14px;">
+        Diagnosing problems: in the Apps Script editor, left sidebar →
+        <strong>Executions</strong> shows every request, success or failure.
+        If your upload fails, click the execution to see the exception.
+      </p>
+    </div>
+
+    <h2 id="troubleshooting" style="color: var(--pink-deep);">Troubleshooting</h2>
+
+    <div class="step" style="border-color: var(--pink); border-width: 2px;">
+      <h3 style="color: var(--pink-deep); margin-top: 0;">"Couldn't upload that one" appears on the page</h3>
+      <p>The upload reached the browser's <code>fetch</code> but didn't get a happy answer back. Check in order:</p>
+      <ol>
+        <li>
+          <strong>FOLDER_ID is still <code>"PASTE_FOLDER_ID_HERE"</code>.</strong>
+          The most common Step-3 mistake. Open the script, replace it with the real ID, save, then
+          <strong>Deploy → Manage deployments → edit → New version → Deploy</strong>
+          (Apps Script does <em>not</em> auto-deploy edits).
+        </li>
+        <li>
+          <strong>Drive folder isn't shared "Anyone with the link."</strong>
+          The file uploads, but the page can't display it, so the optimistic
+          render of the new tile shows a broken image. Fix the folder
+          sharing (Step 1), then re-upload.
+        </li>
+        <li>
+          <strong>The deployment's "Who has access" isn't Anyone.</strong>
+          Same fix as the RSVP script — Deploy → Manage deployments → edit →
+          set Who has access to Anyone → New version → Deploy.
+        </li>
+      </ol>
+    </div>
+
+    <div class="step" style="border-color: var(--pink); border-width: 2px;">
+      <h3 style="color: var(--pink-deep); margin-top: 0;">The photo wall doesn't show any uploaded photos (only seeds + the + tile)</h3>
+      <ol>
+        <li>Open your photo-wall <code>/exec</code> URL directly in a browser. You should see JSON. If you see "Sorry, unable to open the file…" — that's the same authorization/access issue covered in <a href="Setup.html#troubleshooting">Setup.html's troubleshooting</a>. Same three causes, same fix.</li>
+        <li>Open the browser devtools console on <code>index.html</code>. A red CORS or 401 error here means the URL pasted into <code>data.js</code> is wrong (most often: pasted the <code>/dev</code> URL instead of <code>/exec</code>, or pasted the RSVP URL by mistake).</li>
+        <li>Check the Apps Script <strong>Executions</strong> tab. If you see no <code>doGet</code> entries when the page loads, the page isn't reaching the script — re-check <code>data.js</code> and make sure you committed + pushed to GitHub Pages.</li>
+      </ol>
+    </div>
+
+    <div class="step" style="border-color: var(--pink); border-width: 2px;">
+      <h3 style="color: var(--pink-deep); margin-top: 0;">Uploads succeed on desktop but fail on a guest's iPhone</h3>
+      <p>
+        Usually a photo size issue — the page already shrinks images to ~1600px before sending,
+        but a 4K Live Photo or HEIC can still misbehave on older Safari versions. Ask the guest to
+        retake using "Most Compatible" in Settings → Camera → Formats, or pick a smaller photo.
+      </p>
+    </div>
+
+    <div class="step" style="border-color: var(--pink); border-width: 2px;">
+      <h3 style="color: var(--pink-deep); margin-top: 0;">A guest uploaded something you'd rather not have on the wall</h3>
+      <p>
+        Open the Drive folder, delete the file. Reload the page — it's gone.
+        The wall is just a live listing of that folder, so Drive is your moderation tool.
+      </p>
+    </div>
+
+    <h2>If you'd rather skip uploads entirely</h2>
+    <p>
+      Leave <code>photoEndpointURL</code> as an empty string in <code>data.js</code>.
+      The photo wall still renders with the seed photos from <code>wallPhotos</code>,
+      and the <strong>+ Add a photo</strong> tile shows a friendly message telling
+      guests uploads aren't configured.
+    </p>
+
+    <p style="text-align: center; margin-top: 56px;">
+      <span class="script" style="font-size: 42px;">See you in June</span>
+    </p>
+  </div>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    document.querySelectorAll(".copy").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = document.getElementById(btn.dataset.target);
+        // Decode HTML entities back to plain text so &amp; → & in the copied script
+        const tmp = document.createElement("textarea");
+        tmp.innerHTML = target.innerHTML;
+        navigator.clipboard.writeText(tmp.value).then(() => {
+          const orig = btn.textContent;
+          btn.textContent = "Copied";
+          setTimeout(() => btn.textContent = orig, 1500);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
