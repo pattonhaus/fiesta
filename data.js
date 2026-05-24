@@ -10,7 +10,7 @@ window.FIESTA_DATA = {
   // The main event
   openHouse: {
     label: "Open House",
-    date: "Saturday, June 13, 2026",
+    date: "Saturday, June 13",
     time: "Open House from 3:00 — 8:00 PM",
     dateISO: "2026-06-13T15:00:00-07:00"
   },
@@ -18,7 +18,7 @@ window.FIESTA_DATA = {
   // Casual weekend mention
   sundayBrunch: {
     label: "Sunday Brunch Bites",
-    date: "Sunday, June 14, 2026",
+    date: "June 14",
     time: "9:00 — 11:00 AM"
   },
 
@@ -87,7 +87,7 @@ window.FIESTA_DATA = {
       labelWhen: "When",
       labelWhere: "Where",
       labelHosts: "Hosted by",
-      weekendPrefix: "Staying for the weekend? Drop by for"
+      weekendPrefix: "Please RSVP below. Staying for the weekend? Drop by for"
     },
 
     // The personal note from Laura & Jeff
