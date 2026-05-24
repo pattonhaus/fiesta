@@ -87,7 +87,7 @@ window.FIESTA_DATA = {
       labelWhen: "When",
       labelWhere: "Where",
       labelHosts: "Hosted by",
-      weekendPrefix: "Please RSVP below. Staying for the weekend? Drop by for"
+      weekendPrefix: "Staying for the weekend? Drop by for"
     },
 
     // The personal note from Laura & Jeff
