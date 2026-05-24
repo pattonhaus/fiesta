@@ -105,7 +105,7 @@ function App() {
       <window.PhotoWall data={D} />
       <window.Travel data={D} />
 
-      <section data-screen-label="07 RSVP">
+      <section id="rsvp" data-screen-label="07 RSVP">
         <div className="container tight">
           <div className="section-heading">
             <div className="eyebrow">{D.sections.rsvp.eyebrow}</div>
