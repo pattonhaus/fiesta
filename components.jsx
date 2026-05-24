@@ -54,7 +54,11 @@ function Hero({ data }) {
               <div className="value">{data.hosts}</div>
             </div>
           </div>
-
+          <div className="rsvp-cta">
+            <a href="#rsvp" className="rsvp-cta-link">
+              Please RSVP below <span aria-hidden="true">↓</span>
+            </a>
+          </div>
           <div className="weekend-note">
             {s.weekendPrefix}{" "}
             <strong>{data.sundayBrunch.label}</strong> on {data.sundayBrunch.date}, {data.sundayBrunch.time}.
